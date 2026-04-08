@@ -14,18 +14,21 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Header avec dropdown -->
+        <!-- Header avec logo et fond noir -->
         <header class="app-header">
             <div class="header-content">
-                <h1 class="app-title">Canaux de Bretagne</h1>
-                <div class="dropdown-wrapper">
-                    <label for="channel-select" class="dropdown-label">Sélectionnez un canal :</label>
-                    <select id="channel-select" class="dropdown-menu" aria-label="Sélectionner un canal">
-                        <option value="">Chargement...</option>
-                    </select>
-                </div>
+                <img src="./assets/images/logo.png" alt="Logo Canaux Bretagne" class="header-logo">
             </div>
         </header>
+
+        <!-- Section du dropdown -->
+        <div class="controls-section">
+            <div class="controls-content">
+                <select id="channel-select" class="dropdown-menu" aria-label="Sélectionner un canal">
+                    <option value="">Chargement...</option>
+                </select>
+            </div>
+        </div>
 
         <!-- Conteneur de la carte -->
         <main class="map-container" id="map"></main>
