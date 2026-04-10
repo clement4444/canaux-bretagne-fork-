@@ -92,9 +92,6 @@ function createBoatDetailsUniteInfo(label, imgUrl, info) {
  * @returns {string} Carte HTML pour le bateau
  */
 export function createBoatDetailsCard(boat) {
-    console.log("----------------------")
-    console.log(boat.ecluse)
-    console.log(boat.ecluses)
 
     const boatCard = document.createElement("div");
     boatCard.className = "boat-card";
