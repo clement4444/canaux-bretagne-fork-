@@ -253,9 +253,17 @@ class MapManager {
 
                 const [markerLat, markerLng] = this.getRandomPointBetween(lat1, lng1, lat2, lng2);
 
+
+                // compte le nombre de bateux par direction
+                const countByDirection = boatsInBief.reduce((acc, boat) => {
+                    const direction = boat.sens || 'Inconnu';
+                    acc[direction] = (acc[direction] || 0) + 1;
+                    return acc;
+                }, {});
+
                 // Créer le marqueur
                 const marker = L.marker([markerLat, markerLng], {
-                    icon: this.createBoatIcon(),
+                    icon: this.createBoatIcon(countByDirection['Montant'], countByDirection['Descendant']),
                     title: `${boatsInBief.length} bateau(x)`
                 });
 
@@ -268,6 +276,8 @@ class MapManager {
 
                 marker.addTo(this.markersLayer);
                 this.currentMarkers.push(marker);
+
+                // L.marker([markerLat, markerLng]).addTo(this.markersLayer);
             });
         } catch (error) {
             console.error('❌ Erreur lors de l\'ajout des bateaux:', error);
@@ -276,12 +286,30 @@ class MapManager {
 
     /**
      * Crée une icône personnalisée pour les bateaux
+     * @param {number} nbMontant - Nombre de bateaux montant
+     * @param {number} nbDescendant - Nombre de bateaux descendant
      * @returns {L.DivIcon} Icône customisée
      */
-    createBoatIcon() {
+    createBoatIcon(nbMontant = 0, nbDescendant = 0) {
         return L.divIcon({
             className: 'custom-icon boat-icon',
-            html: '<img src="/assets/images/icons/boat.svg" alt="Bateau" style="width: 100%; height: 100%; object-fit: contain;">',
+            html: `
+                <div style="position:relative; width:100%; height:100%;">
+                    <img src="/assets/images/icons/boat.svg" alt="Bateau" style="width: 100%; height: 100%; object-fit: contain;">
+                    ${nbMontant > 0 || nbDescendant > 0 ? `
+                        <div class="marker-infos">
+                            ${nbDescendant > 0 ? `<div class="marker-direction">
+                                <p class="marker-letter" style="background-color: #AFCB56;">D</p>
+                                <p class="marker-count">${nbDescendant}</p>
+                            </div>` : ""}
+                            ${nbMontant > 0 ? `<div class="marker-direction">
+                                <p class="marker-letter" style="background-color: #F1B453;">M</p>
+                                <p class="marker-count">${nbMontant}</p>
+                            </div>` : ""}
+                        </div>`
+                    : ""}
+                </div>
+            `,
             iconSize: [32, 32],
             iconAnchor: [16, 16],
             popupAnchor: [0, -16]
